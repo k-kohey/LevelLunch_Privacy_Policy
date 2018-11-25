@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>アプリ起動サンプル</title>
+</head>
+<body>
+
+    <div style="width: 0; height: 0; overflow: hidden;">
+        <iframe id="launch_frame" name="launch_frame"> </iframe>
+    </div>
+
+    <a href="https://itunes.apple.com/jp/app/id1440151518">iOS専用アプリです</a>
+
+    <script>
+        // fetched by https://qiita.com/kenguy/items/9d9a8b7b6ca8b6984eb9
+        // アプリを開く。アプリがインストールされていなければサイトを開く。
+        function launchApp() {
+            var IOS_STORE = 'https://itunes.apple.com/jp/app/id1440151518';
+            var queryHash = getQuery();
+            var resultUrl = 'LvLunch://';
+            var userAgent = navigator.userAgent.toLowerCase();
+            // iPhone端末ならアプリを開くかApp Storeを開く。
+            if (userAgent.search(/iphone|ipad|ipod/) > -1) {
+                for (key in queryHash) {
+                    resultUrl = resultUrl + key + '/' + queryHash[key];
+                }
+                launch_frame.location.href = resultUrl;
+                setTimeout(function() {
+                    location.href = IOS_STORE;
+                }, 500);
+            }
+        }
+
+        //fetched by https://qiita.com/tomon9086/items/7337f18237d6620a77dc
+        function getQuery() {
+            if(window.location.search === "") return;
+            const variables = window.location.search.split("?")[1].split("&");
+            const obj = {};
+            variables.forEach(function(v, i) {
+                const variable = v.split("=");
+                obj[variable[0]] = String(variable[1]);
+            });
+            return obj;
+        }
+
+
+        // ページ読み込み時に実行
+        window.onload = function() {
+            launchApp();
+        }
+    </script>
+</body>
+</html>
